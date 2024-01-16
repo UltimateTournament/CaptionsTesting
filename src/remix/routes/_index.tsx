@@ -1,5 +1,7 @@
 import type { MetaFunction } from "@remix-run/node";
-import { useEffect } from "react";
+import { useEffect } from "react"
+import { ClientOnly } from "remix-utils/client-only";
+import Captions from "~/components/Captions";
 
 export const meta: MetaFunction = () => {
   return [
@@ -10,44 +12,16 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
 
-  useEffect(() => {
-    const ws = new WebSocket("ws://localhost:8080/ws")
-    setTimeout(() => {
-      ws.send("hey")
-    }, 1000)
-    ws.onmessage = (msg) => {
-      console.log('got msg', msg.data)
-    }
-  }, [])
-
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1 className="font-bold">Welcome to Remix</h1>
-      <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/blog"
-            rel="noreferrer"
-          >
-            15m Quickstart Blog Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/jokes"
-            rel="noreferrer"
-          >
-            Deep Dive Jokes App Tutorial
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
-      </ul>
+      <h1>Recording captions:</h1>
+      <ClientOnly>
+        {() => {
+          return (
+            <Captions />
+          )
+        }}
+      </ClientOnly>
     </div>
   );
 }
