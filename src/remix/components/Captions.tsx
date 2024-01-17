@@ -3,12 +3,12 @@ import { useEffect, useRef } from "react"
 async function getMicrophone() {
   const userMedia = await navigator.mediaDevices.getUserMedia({
     audio: {
-      sampleRate: 44100,
+      sampleRate: 48000,
     },
   });
 
   return new MediaRecorder(userMedia, {
-    mimeType: "audio/webm; codecs=opus"
+    mimeType: "audio/webm; codecs=opus" // I believe this is default
   });
 }
 
