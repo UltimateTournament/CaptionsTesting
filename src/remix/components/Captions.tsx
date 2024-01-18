@@ -3,13 +3,16 @@ import { useEffect, useRef } from "react"
 async function getMicrophone() {
   const userMedia = await navigator.mediaDevices.getUserMedia({
     audio: {
-      sampleRate: 48000,
+      sampleRate: 32000,
     },
   });
 
-  return new MediaRecorder(userMedia, {
-    mimeType: "audio/webm; codecs=opus" // I believe this is default
+  console.log(MediaRecorder.isTypeSupported('audio/webm; codecs=opus'))
+  const mr = new MediaRecorder(userMedia, {
+    mimeType: 'audio/webm; codecs=opus'
   });
+  console.log(mr.audioBitsPerSecond, mr.mimeType)
+  return mr
 }
 
 async function openMicrophone(microphone: MediaRecorder, socket: WebSocket) {

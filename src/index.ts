@@ -116,7 +116,7 @@ interface WSdata {
 app.get("/ws", async (c) => {
   // Connect to deepgram and pass through the websocket connection
   const dgWS = new WebSocket(
-    "wss://api.deepgram.com/v1/listen?model=nova-2-general&encoding=opus&channels=1&sample_rate=48000",
+    "wss://api.deepgram.com/v1/listen?model=nova-2-general&encoding=opus&channels=1&sample_rate=128000&language=en-US",
     {
       headers: {
         Authorization: `Token ${process.env.DEEPGRAM_KEY}`,
@@ -125,7 +125,7 @@ app.get("/ws", async (c) => {
   )
   dgWS.onmessage = (msg) => {
     const payload: DeepgramPayload = JSON.parse(msg.data as string)
-    console.log("got msg from deepgram", payload?.channel?.alternatives[0].transcript)
+    console.log("got msg from deepgram", payload, payload?.channel?.alternatives[0].transcript)
   }
   dgWS.onclose = (msg) => {
     console.log("dg ws closed", msg)
@@ -170,8 +170,8 @@ const server = Bun.serve({
   websocket: {
     message(ws: ServerWebSocket<WSdata>, msg) {
       const b = msg as Buffer
-      console.log("Sending buffer to Deepgram", msg.length)
-      ws.data.deepgram.send(msg)
+      // console.log("Sending buffer to Deepgram", msg.length)
+      ws.data.deepgram.send(b)
     },
     open(ws) {
       console.log("websocket opened", ws.data)
